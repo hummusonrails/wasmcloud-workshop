@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  wasmcloud:
+    image: wasmcloud/wasmcloud
+    container_name: wasmcloud_central
+    ports:
+      - "8080:8080"  # wasmCloud HTTP API
+    environment:
+      WASMCLOUD_HOST_KEY: central-wasmcloud
+      WASMCLOUD_CTL_NATS_HOST: ${CENTRAL_WASMCLOUD_URL}
+    depends_on:
+      - nats
+
+  nats:
+    image: nats:latest
+    container_name: nats_server
+    ports:
+      - "4222:4222"
+      - "8222:8222"

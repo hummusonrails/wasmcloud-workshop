@@ -1,0 +1,7 @@
+[provider]
+name = "nats-messaging"
+image = "wasmcloud.azurecr.io/nats_messaging:latest"
+oci_reference = "wasmcloud.azurecr.io/nats_messaging:latest"
+
+[config]
+NATS_URL = "${CENTRAL_WASMCLOUD_URL}"

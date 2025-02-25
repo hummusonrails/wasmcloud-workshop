@@ -1,0 +1,16 @@
+[host]
+labels = { "central" = "wasmcloud" }
+allow_latest = true
+
+[actors]
+autoupdate = true
+source = "file://actors"
+
+[providers]
+capabilities = [
+  "wasmcloud:couchbase",
+  "wasmcloud:nats"
+]
+
+[wasmcloud]
+nats_url = "${CENTRAL_WASMCLOUD_URL}"

@@ -1,0 +1,10 @@
+[provider]
+name = "couchbase"
+image = "wasmcloud.azurecr.io/couchbase:latest"
+oci_reference = "wasmcloud.azurecr.io/couchbase:latest"
+
+[config]
+COUCHBASE_HOST = "${COUCHBASE_HOST}"
+COUCHBASE_USERNAME = "${COUCHBASE_USERNAME}"
+COUCHBASE_PASSWORD = "${COUCHBASE_PASSWORD}"
+COUCHBASE_BUCKET = "${COUCHBASE_BUCKET}"

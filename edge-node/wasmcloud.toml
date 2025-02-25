@@ -1,0 +1,16 @@
+[host]
+labels = { "edge" = "codespace" }
+allow_latest = true
+
+[actors]
+autoupdate = true
+source = "file://actors"
+
+[providers]
+capabilities = [
+  "wasmcloud:httpserver",
+  "wasmcloud:couchbase"
+]
+
+[wasmcloud]
+nats_url = "${CENTRAL_WASMCLOUD_URL}"
