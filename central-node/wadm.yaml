@@ -1,0 +1,28 @@
+version: 0.3
+
+components:
+  couchbase-provider:
+    type: capability
+    image: wasmcloud.azurecr.io/couchbase:latest
+    configuration:
+      COUCHBASE_HOST: ${COUCHBASE_HOST}
+      COUCHBASE_USERNAME: ${COUCHBASE_USERNAME}
+      COUCHBASE_PASSWORD: ${COUCHBASE_PASSWORD}
+      COUCHBASE_BUCKET: ${COUCHBASE_BUCKET}
+
+  nats-messaging:
+    type: capability
+    image: wasmcloud.azurecr.io/nats_messaging:latest
+    configuration:
+      NATS_URL: ${CENTRAL_WASMCLOUD_URL}
+
+  couchbase-actor:
+    type: actor
+    image: file://actors/couchbase-actor.wasm
+    claims:
+      - wasmcloud:httpserver
+      - wasmcloud:couchbase
+    link_definitions:
+      - target: couchbase-provider
+        values:
+          bucket: ${COUCHBASE_BUCKET}

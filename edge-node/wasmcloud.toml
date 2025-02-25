@@ -1,5 +1,5 @@
 [host]
-labels = { "central" = "wasmcloud" }
+labels = { "edge" = "codespace" }
 allow_latest = true
 
 [actors]
@@ -8,8 +8,8 @@ source = "file://actors"
 
 [providers]
 capabilities = [
-  "wasmcloud:couchbase",
-  "wasmcloud:nats"
+  "wasmcloud:httpserver",
+  "wasmcloud:couchbase"
 ]
 
 [wasmcloud]
