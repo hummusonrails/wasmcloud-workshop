@@ -33,15 +33,27 @@ To complete this workshop, you will need:
 This workshop is divided into the following sections:
 
 1. Setup and Environment Initialization
-  * Fork this repository and launch a GitHub Codespace.
-  * Start a local wasmCloud host inside your Codespace.
-  * Verify that your wasmCloud host is running correctly.
+   * Fork this repository and launch a GitHub Codespace.
+   * Start a local wasmCloud host inside your Codespace.
+   * Connect your Codespace’s wasmCloud instance to the shared cloud wasmCloud control plane.
+   * Verify that your edge node is correctly registered in the central wasmCloud instance.
+
 2. Deploying Your First wasmCloud Actor
-  * Run a `hello world` actor to understand how wasmCloud applications work.
-  * Use the `wash` CLI to interact with your actors.
-3. Integrating Couchbase with wasmCloud
-  * Deploy a wasmCloud capability provider for Couchbase.
-  * Connect your actor to Couchbase Capella for data operations.
-4. Scaling Across Cloud and Edge
-  * Set up a multi-host deployment.
-  * Real-time communication between cloud and edge nodes using NATS.
+   * Run a `hello world` actor to understand how wasmCloud applications work.
+   * Use the `wash` CLI to interact with your actors.
+   * Deploy the actor inside your Codespace and test it locally.
+
+3. Connecting to the Shared wasmCloud Instance
+   * Modify your actor to communicate with the central wasmCloud instance.
+   * Use NATS messaging to exchange data between edge nodes and cloud services.
+   * Verify that your actor can communicate across multiple wasmCloud hosts.
+
+4. Integrating Couchbase with wasmCloud
+   * Deploy the Couchbase capability provider in the shared wasmCloud instance.
+   * Modify your actor to store and retrieve data from Couchbase Capella.
+   * Send and fetch data from the cloud database while running your actor at the edge.
+
+5. Scaling and Distributed Messaging
+   * Deploy multiple actors across different hosts (your Codespace and the cloud instance).
+   * Use NATS messaging to send requests between actors running on different machines.
+   * Scale your actor dynamically between cloud and edge nodes.
