@@ -13,4 +13,4 @@ capabilities = [
 ]
 
 [wasmcloud]
-nats_url = "${CENTRAL_WASMCLOUD_URL}"
+nats_url = "nats://nats:4222"

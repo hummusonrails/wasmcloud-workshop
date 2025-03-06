@@ -8,13 +8,33 @@ services:
       - "8080:8080"  # wasmCloud HTTP API
     environment:
       WASMCLOUD_HOST_KEY: central-wasmcloud
-      WASMCLOUD_CTL_NATS_HOST: ${CENTRAL_WASMCLOUD_URL}
+      WASMCLOUD_HOST_ID: wasmcloud-central
+      WASMCLOUD_LOG_LEVEL: debug
+      WASMCLOUD_RPC_HOST: nats
+      WASMCLOUD_CTL_HOST: nats
+      RUST_LOG: "debug"
     depends_on:
       - nats
+    entrypoint: ["/usr/bin/wasmcloud"]
+    volumes:
+      - ./wasmcloud.toml:/etc/wasmcloud/wasmcloud.toml
 
   nats:
     image: nats:latest
     container_name: nats_server
-    ports:
+    ports: 
       - "4222:4222"
-      - "8222:8222"
+    command: ["--config", "/nats-server.conf"]
+    volumes:
+      - ./nats-server.conf:/nats-server.conf
+      - nats_data:/data/jetstream
+
+  wadm:
+    depends_on:
+      - "nats"
+    image: ghcr.io/wasmcloud/wadm:latest
+    environment:
+      - WADM_NATS_SERVER=nats
+      
+volumes:
+  nats_data: 
