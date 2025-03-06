@@ -36,7 +36,6 @@ This directory contains all files needed to **run the central wasmCloud node** f
   gcloud compute firewall-rules create wasmcloud-allow \
     --allow=tcp:4222,tcp:8222,tcp:8080 \
     --source-ranges=0.0.0.0/0 \
-    --target-tags=wasmcloud \
     --description="Allow wasmCloud and NATS"
   ```
 2. Fetch the external IP address of the VM:
