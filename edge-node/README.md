@@ -11,7 +11,7 @@ This directory contains everything needed to run a **wasmCloud edge node** insid
 ## Usage
 1. Set environment variables:
   ```bash
-  export CENTRAL_WASMCLOUD_URL=nats://your-deployed-wasmcloud.fly.dev:4222
+  export CENTRAL_WASMCLOUD_URL=nats://ip-address-provided-by-instructor:4222
   ```
 2. Connect to the central wasmCloud instance:
   ```bash
@@ -19,7 +19,7 @@ This directory contains everything needed to run a **wasmCloud edge node** insid
   ```
 3. Deploy an actor:
   ```bash
-  ./deploy-actor.sh actors/hello-world.wasm
+  ./deploy-actor.sh hello-world
   ```
 
 ## Debugging
