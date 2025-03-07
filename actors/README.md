@@ -7,14 +7,22 @@ This directory contains all **wasmCloud actors** used in the workshop.
 2. **couchbase-actor/** - An actor that connects to Couchbase Capella.
 
 ## Usage:
-- Each actor has its own `Cargo.toml` and `wasmcloud.toml`.
-- To build an actor:
+- Each actor has its own `Cargo.toml`, `wadm.yaml`, and `wasmcloud.toml`.
+- To build an actor from inside its directory:
   ```bash
-  cargo build --release --target wasm32-unknown-unknown
+  wash build
   ```
-- To deploy an actor:
+- To deploy an actor from inside its directory:
   ```bash
-  wash app deploy actors/<actor-name>.wasm
+  wash app deploy wadm.yaml
+  ```
+- To delete an actor:
+  ```bash
+  wash app delete <name-of-component>
+  ```
+- To list all actors:
+  ```bash
+  wash app list
   ```
 
 ## Debugging
@@ -22,4 +30,8 @@ This directory contains all **wasmCloud actors** used in the workshop.
 - Verify the **NATS connection** with:
     ```bash
     wash get hosts
+    ```
+- Make sure the Rust toolchain is installed and the correct wasm target is added:
+    ```bash
+    rustup target add wasm32-wasip2
     ```

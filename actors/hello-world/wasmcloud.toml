@@ -1,3 +1,8 @@
-name = "hello-world"
-wasm_target = "wasm32-unknown-unknown"
-actor_claims = ["wasmcloud:httpserver"]
+name = "http-hello-world"
+version = "0.1.0"
+language = "rust"
+type = "component"
+
+[component]
+wit_world = "hello"
+wasm_target = "wasm32-wasip2"

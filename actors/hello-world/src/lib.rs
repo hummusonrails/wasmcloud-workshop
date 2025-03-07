@@ -1,17 +1,13 @@
-use wasmcloud_interface_logging::info;
-use wasmcloud_interface_httpserver::{HttpRequest, HttpResponse, Handlers};
+use wasmcloud_component::http;
 
-struct HelloWorld;
+struct Component;
 
-impl Handlers for HelloWorld {
-    fn handle_request(req: HttpRequest) -> HttpResponse {
-        let response_text = format!("Hello, wasmCloud! You requested: {}", req.path);
-        info!("{}", response_text);
-        HttpResponse {
-            body: response_text.into_bytes(),
-            ..Default::default()
-        }
+http::export!(Component);
+
+impl http::Server for Component {
+    fn handle(
+        _request: http::IncomingRequest,
+    ) -> http::Result<http::Response<impl http::OutgoingBody>> {
+        Ok(http::Response::new("Hello beautiful Barcelona!\n"))
     }
 }
-
-wasmcloud_interface_httpserver::export!(HelloWorld);
