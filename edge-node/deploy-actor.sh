@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo "Deploying wasmCloud Actor..."
 
 # Validate input
@@ -10,9 +9,10 @@ if [ -z "$1" ]; then
 fi
 
 ACTOR_NAME=$1
-ACTOR_FILE="actors/${ACTOR_NAME}.wasm"
 
-# Check if actor exists
+ROOT_DIR="$(cd "$(dirname "$0")/../" && pwd)"
+ACTOR_FILE="${ROOT_DIR}/actors/${ACTOR_NAME}/wadm.yaml"
+
 if [ ! -f "$ACTOR_FILE" ]; then
   echo "Error: Actor file '$ACTOR_FILE' not found!"
   exit 1
