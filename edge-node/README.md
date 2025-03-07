@@ -12,6 +12,7 @@ This directory contains everything needed to run a **wasmCloud edge node** insid
 1. Set environment variables:
   ```bash
   export CENTRAL_WASMCLOUD_URL=nats://ip-address-provided-by-instructor:4222
+  export WASMCLOUD_CTL_HOST=ip-address-provided-by-instructor
   ```
 2. Connect to the central wasmCloud instance:
   ```bash

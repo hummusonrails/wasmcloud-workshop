@@ -11,7 +11,7 @@ if [[ -z "$CENTRAL_WASMCLOUD_URL" ]]; then
 fi
 
 # Connect the local wasmCloud host to the provided NATS URL
-wash up -d --nats-remote-url "$CENTRAL_WASMCLOUD_URL"
+wash up -d --nats-host "$CENTRAL_WASMCLOUD_URL"
 
 # Parse host and port from CENTRAL_WASMCLOUD_URL
 host_port=${CENTRAL_WASMCLOUD_URL#nats://}
