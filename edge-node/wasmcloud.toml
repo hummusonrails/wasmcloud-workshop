@@ -1,16 +1,12 @@
 [host]
-labels = { "edge" = "codespace" }
+id = "edge-001"
+labels = { "role" = "edge", "name" = "edge-node" }
 allow_latest = true
-
-[actors]
-autoupdate = true
-source = "file://actors"
 
 [providers]
 capabilities = [
-  "wasmcloud:httpserver",
-  "wasmcloud:couchbase"
+  "wasmcloud:httpserver"
 ]
 
 [wasmcloud]
-nats_url = "${CENTRAL_WASMCLOUD_URL}"
+nats_url = "34.29.91.205"

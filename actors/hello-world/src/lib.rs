@@ -1,54 +1,43 @@
 use wasmcloud_component::http;
-use wasmcloud_interface_couchbase::CouchbaseSender;
-use serde_json::json; 
-use serde_json::Value; 
-use std::str;
+use wasmcloud_component::http::ErrorCode;
+use wasmcloud_component::wasi::keyvalue::{self, store, atomics};
+use wasmcloud_component::{info, error}; 
 
 struct Component;
 
-// Export the HTTP actor component 
 http::export!(Component);
 
-pub async fn call_couchbase_actor_get_items() -> Result<Value, String> {
-    // Replace with the actual public key (subject) or call alias of your Couchbase actor.
-    // The subject is a 56-character string starting with 'M' (e.g., "Mxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-    let couchbase_actor_id = "MXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+impl http::Server for Component {
+    fn handle(request: http::IncomingRequest) 
+        -> http::Result<http::Response<impl http::OutgoingBody>> 
+    {
+        // Split the request into parts (headers, etc.) and body stream
+        let (parts, body_stream) = request.into_parts();
+        let path = parts.uri.path();
+        let query = parts.uri.query().unwrap_or_default().to_string();
 
-    // Create a sender handle to the Couchbase actor.
-    let sender = CouchbaseSender::for_actor(couchbase_actor_id)
-        .map_err(|e| format!("Failed to create Couchbase sender: {}", e))?;
+        // Parse a "name" query parameter
+        let name = match query.split('=').collect::<Vec<&str>>()[..] {
+            ["name", value] => value,
+            _ => "World",
+        };
 
-    // Invoke the 'get_items' operation on the Couchbase actor.
-    // This method returns a Result with a vector of bytes.
-    let result_bytes = sender.get_items().await
-        .map_err(|e| format!("Failed to invoke get_items: {}", e))?;
+        // Log an info message (using wasi:logging under the hood)
+        info!("Received request for '{}', responding to {}", path, name);
 
-    // Parse the returned bytes as JSON.
-    let items: Value = serde_json::from_slice(&result_bytes)
-        .map_err(|e| format!("Failed to parse JSON: {}", e))?;
+        // Use key-value store (wasi:keyvalue) to count visits for the name
+        let bucket = store::open("default").map_err(|e| {
+            // Convert any error to an HTTP 500 InternalError with a message
+            ErrorCode::InternalError(Some(format!("KV open error: {:?}", e)))
+        })?;
+        let count = atomics::increment(&bucket, name, 1).map_err(|e| {
+            ErrorCode::InternalError(Some(format!("KV increment error: {:?}", e)))
+        })?;
 
-    Ok(items)
-}
+        // Form the response body
+        let body_text = format!("Hello x{} from wasmCloud, {}!\n", count, name);
 
-impl http::Server for Component { 
-    fn handle(request: http::IncomingRequest) -> http::Result<http::Response<impl http::OutgoingBody>> { 
-        // Check if the request method is GET. 
-        if request.method.to_uppercase() == "GET" { 
-            match call_couchbase_actor_get_items() { 
-                Ok(items) => { 
-                    // Convert the JSON value to a pretty-printed string. 
-                    let body = serde_json::to_string_pretty(&items) .unwrap_or_else(|_| "Error formatting response".to_string()); 
-                    Ok(http::Response::new(body)) 
-                }, 
-                Err(err) => { 
-                    Ok(http::Response::new(format!("Failed to fetch items: {}\n", err))) 
-                }, 
-            } 
-        } 
-        else 
-        { 
-            // For non-GET methods, return an error response. 
-            Ok(http::Response::new("Unsupported HTTP method\n".to_string())) 
-        } 
-    } 
+        // Return an OK 200 response with the body text
+        Ok(http::Response::new(body_text))
+    }
 }

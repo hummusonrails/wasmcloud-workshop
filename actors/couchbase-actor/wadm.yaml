@@ -1,0 +1,53 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: capella-interact
+  annotations:
+    description: 'Couchbase actor with full CRUD operations'
+spec:
+  components:
+    - name: couchbase-actor
+      type: component
+      properties:
+        image: ghcr.io/hummusonrails/couchbase-actor:0.1.0
+      traits:
+        - type: spreadscaler
+          properties:
+            instances: 1
+    - name: couchbase
+      type: capability
+      properties:
+        image: ghcr.io/couchbaselabs/wasmcloud-provider-couchbase:0.1.0
+      traits:
+        - type: link
+          properties:
+            target: couchbase-actor
+            contract_id: wasmcloud:couchbase/document
+            link_name: default
+            values:
+              connectionString: "couchbases://<YOUR_CAPELLA_CLUSTER_ENDPOINT>"
+              bucketName: "<YOUR_BUCKET_NAME>"
+              username: "<YOUR_USERNAME>"
+              password: "<YOUR_PASSWORD>"
+    - name: httpserver
+      type: capability
+      properties:
+        image: ghcr.io/wasmcloud/http-server:0.26.0
+      traits:
+        - type: link
+          properties:
+            target: couchbase-actor
+            contract_id: wasmcloud:httpserver
+            link_name: default
+            values:
+              PORT: "8082"
+    - name: logging
+      type: capability
+      properties:
+        image: ghcr.io/wasmcloud/logging:0.10.0
+      traits:
+        - type: link
+          properties:
+            target: couchbase-actor
+            contract_id: wasmcloud:logging
+            link_name: default
